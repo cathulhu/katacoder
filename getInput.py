@@ -2,6 +2,9 @@ import readchar
 import os
 import ast
 import signal
+from rich.console import Console
+
+
 
 #what if instead we structure the program the following way:
 
@@ -14,51 +17,122 @@ import signal
 
 # current thing I'm working on right now is to get run command as its typed afer typing timeout
 
-def addTest():
-    return 4
+
+
 
 def main():
 
-    data_stack = ["test"]
-    command_stack = []
-    command = ""
-    temp = ""
-    keybuffer = ""
+    console = Console()
+    console.print("Hello", "World!")
 
-    preview_timeout = 1
-    command_valid = False
-    stack_valid = False
 
-    while True:
-        keybuffer = readchar.readkey()
-        if keybuffer == '\x7f' and len(command) > 0:
-            command = command[:-1]
-        elif keybuffer == '\n':
-            command_stack.append(command)
-            command = ""
-        elif keybuffer.isascii():
-            command += keybuffer
+main()
 
-        try:
-            #eval(command)
 
-            for operation in command_stack:
-                temp = data_stack[-1]
-                print("to be run: ",f"temp = temp{command_stack[-1]}")
-                exec(f"temp = temp{command_stack[-1]}")
-                data_stack[:-1] = temp
+# def main():
 
-            os.system("clear")
-            print(command)
+#     def printCommandAndCursor(commandBuffer):
+#         os.system("clear")
+#         print(commandBuffer)
+#         for x in range(0,cursorPosition[0]):
+#             print(" ", end="")
+#         print("-")
 
-        except:
-            pass
+#     def getInput():
+#         return readchar.readkey()
+
+#     def processInput(commandBuffer, keypress, cursorPosition):
+#         # handle spaces
+#         if keypress == " " and commandBuffer[cursorPosition[0]].isalpha:
+#             commandBuffer = commandBuffer[:cursorPosition[0]] + " " + commandBuffer[cursorPosition[0]:]
+#             printCommandAndCursor(commandBuffer)
+#         # delete key
+#         if keypress == '\x7f' and len(commandBuffer) > 0:
+#             if cursorPosition[0] == len(commandBuffer):
+#                 commandBuffer = commandBuffer[:-1]
+#                 cursorPosition[0] -= 1
+#                 printCommandAndCursor(commandBuffer)
+#             else:
+#                 cursorPosition[0] -= 1
+#                 commandBuffer = commandBuffer[:cursorPosition[0]+1] + "" + commandBuffer[cursorPosition[0] + 2:]
+#                 printCommandAndCursor(commandBuffer)
+#         # enter key, so try to add to stack
+#         elif keypress == '\n':
+#             print(" ")
+#             #TODO send to validation for stack adding
+#             return ""
+#         # move cursor right
+#         elif keypress == "\x1b[C" and cursorPosition[0] < len(commandBuffer):
+#             cursorPosition[0] += 1
+#             printCommandAndCursor(commandBuffer)
+#         # don't let cursor move right if already at right
+#         elif keypress == "\x1b[C" and cursorPosition[0] == len(commandBuffer):
+#             printCommandAndCursor(commandBuffer)
+#         # move cursor left
+#         elif keypress == "\x1b[D" and cursorPosition[0] > 0:
+#             cursorPosition[0] -= 1
+#             printCommandAndCursor(commandBuffer)
+#         # don't let cursor move left if already at left
+#         elif keypress == "\x1b[D" and cursorPosition[0] == 0:
+#             printCommandAndCursor(commandBuffer)
+#         # otherwise if normal ascii character
+#         elif keypress.isascii():
+#             #commandBuffer += keypress
+#             commandBuffer = commandBuffer[:cursorPosition[0]] + keypress + commandBuffer[cursorPosition[0] + 1:]
+#             if len(commandBuffer) == cursorPosition[0] + 1:
+#                 cursorPosition[0] += 1
+#                 printCommandAndCursor(commandBuffer)
+#             else:
+#                 printCommandAndCursor(commandBuffer)
+
+#         # TODO have something that looks for up and down key to control which thing in stack is selected
+#         return commandBuffer
+
+
+#     commandBuffer = ""
+#     command_stack = []
+#     data_stack = ["test"]
+#     cursorPosition = [0]
+#     insertMode = False
+
+#     preview_timeout = 1
+#     command_valid = False
+#     stack_valid = False
+
+#     while True:
+#         commandBuffer = processInput(commandBuffer, getInput(), cursorPosition)
+
+
+
+
+
+
+
+
+
+
+    # while True:
+       
+    #     try:
+    #         #eval(command)
+
+    #         for operation in command_stack:
+    #             temp = data_stack[-1]
+    #             print("to be run: ",f"temp = temp{command_stack[-1]}")
+    #             exec(f"temp = temp{command_stack[-1]}")
+    #             data_stack[:-1] = temp
+
+    #         os.system("clear")
+    #         print(command)
+
+    #     except:
+    #         pass
 
 
 
         
 
-#main()
+
 
 
 
