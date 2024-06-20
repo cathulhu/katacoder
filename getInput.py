@@ -14,34 +14,63 @@ from rich.markdown import Markdown
 # inspect("hello", methods=True)
 # res = console.input(">>>")
 # console.print(console.export_text())
+#dataPanel3 = Panel.fit(Columns([dataPanel, dataPanel2]), title="3")
 
 def main():
 
-    commandBuffer = "pop()"
-    dataBuffer = [1,3,5,7,9,10,15]
-    command_stack = [["pop()"]]
-    data_stack = [[1,3,5,7,9,10,15],[1,3,5,7,9,10]]
-    data_stack_string = ""
-    command_stack_string = ""
+    def convertStackToString(stack):
+        stack_string = ""
+        for x in stack:
+            stack_string += str(x) + "\n"
+        return stack_string
+
+    def tryOperation(command, data):
+        try:
+            result = eval(f"data{command}")
+            return (data, result)
+        except:
+            return False
+
+    commandBuffer = ""
+    dataBuffer = ""
+    command_stack = []
+    data_stack = ["hello darling"]
+    output_stack = []
     cursorPosition = [0]
     # vvv part of Rich library for Python
     console = Console(record=True)
 
     while True:
         os.system("clear")
+        commandBuffer = ""
+        #hanlde data differently if string vs if list, we want content not a list item for the string
+        dataBuffer = data_stack[-1]
 
-        for x in data_stack:
-            data_stack_string += str(x) + "\n"
+        #show the available operations for the current top of stack data item
+        inspect(dataBuffer, methods=True)
 
-        for x in command_stack:
-            command_stack_string += str(x) + "\n"
+        # make the data panels for the interface
+        dataHistoryPanel = Panel.fit(convertStackToString(data_stack), title="Data History", width=30 )
+        commandHistoryPanel = Panel.fit(convertStackToString(command_stack), title="Command History",  width=22)
+        lastOutputPanel = Panel.fit(convertStackToString(output_stack), title="Last Output")
 
-        dataPanel = Panel.fit(data_stack_string, title="Data History", width=30 )
-        dataPanel2 = Panel.fit(command_stack_string, title="Command History",  width=22)
-        dataPanel3 = Panel.fit("stuff jere", title="3", height=6, width=4)
-        console.print(Columns([dataPanel, dataPanel2], align="right", title="col title", column_first=False, padding=1))
-        inspect(data_stack[0], methods=True)
-        res = console.input(">>> ")
+        console.print(Columns([dataHistoryPanel, commandHistoryPanel, lastOutputPanel], align="right", title="col title", column_first=False, padding=1))
+        
+        # get input then check if that's a legit operation
+        commandBuffer = console.input(">>> ")
+        newData = tryOperation(commandBuffer, dataBuffer)
+        originalData = newData[0]
+        returnedData = newData[1]
+        if newData:
+            #for now if its a string we are assuming its return we want, vs side effect result
+            if isinstance(originalData, str):
+                data_stack.append(returnedData)
+            else:
+                data_stack.append(originalData)
+
+            command_stack.append(commandBuffer)
+            output_stack.append(returnedData)
+
 
 
 main()
