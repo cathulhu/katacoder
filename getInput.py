@@ -2,32 +2,50 @@ import readchar
 import os
 import ast
 import signal
+from rich import inspect
 from rich.console import Console
+from rich.color import Color
+from rich.columns import Columns
+from rich.panel import Panel
+from rich.markdown import Markdown
 
-
-
-#what if instead we structure the program the following way:
-
-# have a stack of operations to be run, each time the user pushes enter they commit the current opereation to the stack
-# live typing shows a preview of what the latest operation would do
-# can use arrow keys to move through the stack and enable/disable, reorder, or remove them
-# after users modify the state of the stack the code re-runs in the new correct order
-# code should check if the new changes break things and show where / how
-# maybe later incorperate live preview of how changes to the stack effect the rest of the stack
-
-# current thing I'm working on right now is to get run command as its typed afer typing timeout
-
-
-
+# Rich library text and tui examples
+# console.print("hi")
+# inspect("hello", methods=True)
+# res = console.input(">>>")
+# console.print(console.export_text())
 
 def main():
 
-    console = Console()
-    console.print("Hello", "World!")
+    commandBuffer = "pop()"
+    dataBuffer = [1,3,5,7,9,10,15]
+    command_stack = [["pop()"]]
+    data_stack = [[1,3,5,7,9,10,15],[1,3,5,7,9,10]]
+    data_stack_string = ""
+    command_stack_string = ""
+    cursorPosition = [0]
+    # vvv part of Rich library for Python
+    console = Console(record=True)
+
+    while True:
+        os.system("clear")
+
+        for x in data_stack:
+            data_stack_string += str(x) + "\n"
+
+        for x in command_stack:
+            command_stack_string += str(x) + "\n"
+
+        dataPanel = Panel.fit(data_stack_string, title="Data History", width=30 )
+        dataPanel2 = Panel.fit(command_stack_string, title="Command History",  width=22)
+        dataPanel3 = Panel.fit("stuff jere", title="3", height=6, width=4)
+        console.print(Columns([dataPanel, dataPanel2], align="right", title="col title", column_first=False, padding=1))
+        inspect(data_stack[0], methods=True)
+        res = console.input(">>> ")
 
 
 main()
-
+    
 
 # def main():
 
@@ -180,3 +198,18 @@ main()
 #     #print(command)
 #     print_status()
 
+
+
+
+
+
+# what if instead we structure the program the following way:
+
+# have a stack of operations to be run, each time the user pushes enter they commit the current opereation to the stack
+# live typing shows a preview of what the latest operation would do
+# can use arrow keys to move through the stack and enable/disable, reorder, or remove them
+# after users modify the state of the stack the code re-runs in the new correct order
+# code should check if the new changes break things and show where / how
+# maybe later incorperate live preview of how changes to the stack effect the rest of the stack
+
+# current thing I'm working on right now is to get run command as its typed afer typing timeout
