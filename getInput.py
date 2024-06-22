@@ -28,6 +28,8 @@ def main():
         return int(choice)
 
     def convertDataToString(stack):
+        if isinstance(stack, str):
+            return stack
         stack_string = ""
         for x in stack:
             stack_string += "data" + " = " +str(x) + "\n"
